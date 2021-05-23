@@ -3,10 +3,9 @@
 .idea/tasks.xml
 .idea/dictionaries
 .idea/vcs.xml
-.idea/workspace.xml
 
 # Byte-compiled/optimized files
 __pycache__/
 
-# Ignore txt 
+# Ignore txt
 *.txt
