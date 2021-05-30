@@ -1,0 +1,50 @@
+[default]
+geometry = 1100x650+218+32
+
+[background]
+img = images/map.png
+
+[icons]
+loc = https://img.icons8.com/wired/50/ffffff/user-location.png
+search = https://img.icons8.com/pastel-glyph/20/ffffff/search--v2.png
+capital = https://img.icons8.com/pastel-glyph/16/044a72/bank-building.png
+region = https://img.icons8.com/ios/16/044a72/globe--v1.png
+currency = https://img.icons8.com/ios-filled/16/044a72/mts-money.png
+area = https://img.icons8.com/material/16/044a72/square-number.png
+population = https://img.icons8.com/pastel-glyph/16/044a72/person-male--v3.png
+languages = https://img.icons8.com/pastel-glyph/16/044a72/communication--v2.png
+borders = https://img.icons8.com/ios-filled/16/044a72/country.png
+calling code = https://img.icons8.com/ios-filled/16/044a72/phone-disconnected.png
+lat/long = https://img.icons8.com/material/16/044a72/worldwide-location--v1.png
+
+[icons2]
+loc = images/user-location.png
+search = images/search.png
+capital = images/capital.png
+region = images/region.png
+currency = images/currency.png
+area = images/area.png
+population = images/population.png
+languages = images/languages.png
+borders = images/borders.png
+calling code = images/call.png
+lat/long = images/lat.png
+
+
+[currency]
+switzerland = CHF
+belarus = BYN
+united states = USD
+canada = CAD
+uruguay = UYU
+
+[covid]
+united states = usa
+united kingdom = uk
+united arab emirates = uae
+south korea = s. korea
+democratic republic of the congo = congo
+central african republic = car
+american samoa = samoa
+czech republic = czechia
+the bahamas = bahamas
