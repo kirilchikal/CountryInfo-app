@@ -5,31 +5,38 @@ from datetime import datetime
 import geocoder
 import requests
 from bs4 import BeautifulSoup
-from PIL import Image
+
+
+"""
+    Class that contains the clock widget
+"""
 
 
 class Clock:
-    """ Class that contains the clock widget and clock refresh """
 
     def __init__(self, parent, code):
-        """
-        Create the clock widget
-        It's an ordinary Label element
-        """
+        # create clock widget by timezone
         self.zone = pytz.country_timezones(code)[0]
         now = datetime.now(pytz.timezone(self.zone))
         self.time = now.strftime('%H:%M:%S')
         self.widget = Label(parent, text=self.time)
-        self.widget.after(200, self.tick)  # Wait 200 ms, then run tick()
+        self.widget.after(200, self.tick)  # wait 200 ms, then tick
 
     def tick(self):
-        """ Update the display clock """
+        # update the display clock
         now = datetime.now(pytz.timezone(self.zone))
         new_time = now.strftime('%H:%M:%S')
         if new_time != self.time:
             self.time = new_time
             self.widget.config(text=self.time)
         self.widget.after(200, self.tick)
+
+
+
+
+"""
+    Return info about user location
+"""
 
 
 def user_geo(country_name="me"):
@@ -39,27 +46,41 @@ def user_geo(country_name="me"):
     else:
         country = CountryInfo(country_name)
         code = country.iso(2)
+    capital = country.capital()
     name = country.name().capitalize()
-    timezone = country.timezones()
-    currency = country.currencies() if code != "BY" else ["BYN"]
-    return code, name, timezone, currency
+    currency = country.currencies()
+    return [code, name, capital, currency]
+
+
+
+
+"""
+    Return info of search country
+"""
 
 
 def country_info(country_name):
     d = []
     country = CountryInfo(country_name)
-    d.append(("name", country.name().capitalize()))
-    d.append(("capital", country.capital().capitalize()))
-    d.append(("region", country.region().capitalize()))
-    d.append(("currency", country.currencies()))
-    d.append(("area", country.area()))
-    d.append(("population", country.population()))
-    d.append(("languages", country.languages()))
-    d.append(("borders", country.borders()))
-    d.append(("calling code", country.calling_codes()))
-    d.append(("lat/long", country.capital_latlng()))
-    d.append(("code", country.iso(2)))
+    d.append(["name", country.name().capitalize()])
+    d.append(["capital", country.capital().capitalize()])
+    d.append(["region", country.region().capitalize()])
+    d.append(["currency", country.currencies()])
+    d.append(["area", country.area()])
+    d.append(["population", country.population()])
+    d.append(["languages", country.languages()])
+    d.append(["borders", country.borders()])
+    d.append(["calling code", country.calling_codes()])
+    d.append(["lat/long", country.capital_latlng()])
+    d.append(["code", country.iso(2)])
     return d
+
+
+
+
+"""
+    Return distance between origin and dest
+"""
 
 
 def get_distance(start, destination):
@@ -67,21 +88,27 @@ def get_distance(start, destination):
     return round(d, 2)
 
 
+
+
+"""
+    Read covid data
+"""
 page = requests.get('https://www.worldometers.info/coronavirus/#countries')
 soup = BeautifulSoup(page.content, 'html.parser')
 rows = soup.findChildren("tr")
 
 
-def covid_data(country):
-    if country.lower() == "united states":
-        country = "USA"
-    if country.lower() == "united kingdom":
-        country = "UK"
+def covid_data(country, covid_check_names):
+    country = country.lower()
+
+    if country in covid_check_names:
+        country = covid_check_names[country]
+
     data = []
 
     for i in range(len(rows)):
         a = rows[i].findChildren("a")
-        if len(a) != 0 and a[0].text.lower() == country.lower():
+        if len(a) != 0 and a[0].text.lower() == country:
             items = rows[i].find_all("td")
             for k in range(2, 7):
                 data.append(items[k].text)
@@ -89,24 +116,18 @@ def covid_data(country):
     return data
 
 
-icons = {'loc': Image.open(requests.get("https://img.icons8.com/wired/50/ffffff/user-location.png", stream=True).raw),
-         'search': Image.open(
-             requests.get("https://img.icons8.com/pastel-glyph/20/ffffff/search--v2.png", stream=True).raw),
-         'capital': Image.open(
-             requests.get("https://img.icons8.com/pastel-glyph/16/044a72/bank-building.png", stream=True).raw),
-         'region': Image.open(requests.get("https://img.icons8.com/ios/16/044a72/globe--v1.png", stream=True).raw),
-         'currency': Image.open(
-             requests.get("https://img.icons8.com/ios-filled/16/044a72/mts-money.png", stream=True).raw),
-         'area': Image.open(
-             requests.get("https://img.icons8.com/material/16/044a72/square-number.png", stream=True).raw),
-         'population': Image.open(
-             requests.get("https://img.icons8.com/pastel-glyph/16/044a72/person-male--v3.png", stream=True).raw),
-         'languages': Image.open(
-             requests.get("https://img.icons8.com/pastel-glyph/16/044a72/communication--v2.png", stream=True).raw),
-         'borders': Image.open(
-             requests.get("https://img.icons8.com/ios-filled/16/044a72/country.png", stream=True).raw),
-         'calling code': Image.open(
-             requests.get("https://img.icons8.com/ios-filled/16/044a72/phone-disconnected.png", stream=True).raw),
-         'lat/long': Image.open(
-             requests.get("https://img.icons8.com/material/16/044a72/worldwide-location--v1.png", stream=True).raw)
-         }
+key = "aef51fddd1542d99e3e3dd0a3a48368f"
+
+
+def capital_weather(name, code):
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={name},{code}&units=metric&appid={key}"
+    data = requests.get(url).json()
+    return round(data['main']['temp'], 1), data['weather'][0]['description']
+
+
+def convert(from_currency, to_currency, amount):
+    url = "https://free.currconv.com/api/v7/convert?q={}_{}&compact=ultra&apiKey=823a98dff8e3faf9b922".format(from_currency, to_currency)
+    data = requests.get(url).json()
+    amount = round(amount * data[f"{from_currency}_{to_currency}"], 2)
+    return amount
+
