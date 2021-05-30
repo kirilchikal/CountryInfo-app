@@ -48,3 +48,9 @@ central african republic = car
 american samoa = samoa
 czech republic = czechia
 the bahamas = bahamas
+
+[weatherAPI]
+key = aef51fddd1542d99e3e3dd0a3a48368f
+
+[currencyAPI]
+key = 823a98dff8e3faf9b922

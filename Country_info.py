@@ -116,17 +116,17 @@ def covid_data(country, covid_check_names):
     return data
 
 
-key = "aef51fddd1542d99e3e3dd0a3a48368f"
+# key = "aef51fddd1542d99e3e3dd0a3a48368f"
 
 
-def capital_weather(name, code):
+def capital_weather(name, code, key):
     url = f"http://api.openweathermap.org/data/2.5/weather?q={name},{code}&units=metric&appid={key}"
     data = requests.get(url).json()
     return round(data['main']['temp'], 1), data['weather'][0]['description']
 
 
-def convert(from_currency, to_currency, amount):
-    url = "https://free.currconv.com/api/v7/convert?q={}_{}&compact=ultra&apiKey=823a98dff8e3faf9b922".format(from_currency, to_currency)
+def convert(from_currency, to_currency, amount, key):
+    url = "https://free.currconv.com/api/v7/convert?q={}_{}&compact=ultra&apiKey={}".format(from_currency, to_currency, key)
     data = requests.get(url).json()
     amount = round(amount * data[f"{from_currency}_{to_currency}"], 2)
     return amount

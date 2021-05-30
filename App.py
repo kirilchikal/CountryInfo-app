@@ -31,6 +31,10 @@ class App:
         for x in self.config.options('covid'):
             self.covid_err[x] = self.config.get('covid', x)
 
+        # get API keys
+        self.weather_key = self.config['weatherAPI']['key']
+        self.currency_key = self.config['currencyAPI']['key']
+
         # user location frame is hidden
         self.hid = False
         # list of user country info
@@ -148,7 +152,7 @@ class App:
         # add weather
         weather = Frame(self.map, bg="white")
         weather.place(relx=0.35, y=165)
-        temp, description = capital_weather(self.c_info[1][1], self.c_info[10][1])
+        temp, description = capital_weather(self.c_info[1][1], self.c_info[10][1], self.weather_key)
         Label(weather, text=f"Weather in {self.c_info[1][1].title()}", fg="white",
               font="Corbel 12", bg="#044a72", padx=25).pack()
         Label(weather, text=f"{temp}°C", font=("Calibri", 14), bg="white", fg="#4e4e4e").pack()
@@ -257,7 +261,7 @@ class App:
             amount = int(amount)
         except ValueError:
             messagebox.showinfo("showinfo", "The amaunt value must be a number")
-        value = convert(from_c, to_c, amount)
+        value = convert(from_c, to_c, amount, self.currency_key)
         Label(frame, text="{} {} = {} {}".format(amount, from_c, value, to_c),
               bg="white", font=("Bahnschrift Semilight", 12), fg="#656565").grid(row=3, columnspan=2)
 
