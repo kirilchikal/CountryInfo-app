@@ -50,7 +50,7 @@ czech republic = czechia
 the bahamas = bahamas
 
 [weatherAPI]
-key = aef51fddd1542d99e3e3dd0a3a48368f
+key = [secret API key]
 
 [currencyAPI]
-key = 823a98dff8e3faf9b922
+key = [secret API key]
